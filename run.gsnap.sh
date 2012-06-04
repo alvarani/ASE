@@ -59,7 +59,7 @@ cat fastq.files | sed 's/1.filter.fastq//' | grep -v '2.filter.fastq' >fastqfile
 #SBATCH -A $projid
 #SBATCH -t 35:00:00
 #SBATCH -J gsnap
-#SBATCH -p core -n 1
+#SBATCH -p node -n 1
 #SBATCH -e $outdir/log/gsnap.samplejid_%j.stderr
 #SBATCH -o $outdir/log/gsnap.samplejid_%j.stdout
 #SBATCH --mail-type=All

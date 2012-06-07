@@ -6,11 +6,11 @@
 ###
 #rmDups
 ###
-email='daniel.edsgard@scilifelab.se'
-projid='b2010035'
-execdir='/bubo/home/h26/edsgard/glob/code/ngs_pipes/hs_pipe'
-bamdir='/proj/b2012046/edsgard/ase/sim/data/tophat'
-sbatchdir='/proj/b2012046/edsgard/ase/sim/scripts/rmdups'
+email='alva.rani@scilifelab.se'
+projid='b2012046'
+execdir='/proj/b2012046/rani/scripts/gsnap/bamexec'
+bamdir='/proj/b2012046/rani/scripts/gsnap/bamfiles'
+sbatchdir='/proj/b2012046/rani/scripts/bamscripts'
 cd $sbatchdir
 find $bamdir -name 'accepted_hits.bam' | awk -F'/' -v execdir=$execdir -v sbatchdir=$sbatchdir -v projid=$projid -v email=$email '{print "perl", execdir"/rmdups.pl", $0, $9, sbatchdir, projid, email;}' >rmdups.sh
 sh rmdups.sh
@@ -32,10 +32,10 @@ sh cmds.sh
 ###
 #Merge and sort bam files
 ###
-projid='b2010035'
-email='daniel.edsgard@scilifelab.se'
-sbatchdir='/proj/b2012046/edsgard/ase/sim/scripts/mergebams'
-execdir='/bubo/home/h26/edsgard/glob/code/ase'
+projid='b2012046'
+email='alva.rani@scilifelab.se'
+sbatchdir='/proj/b2012046/rani/scripts/gsnap/mergebams'
+execdir='/proj/b2012046/rani/scripts/gsnap/bamexec'
 bamdir='/proj/b2012046/edsgard/ase/sim/data/tophat'
 outdir=$bamdir
 time='11:00:00'

@@ -6,8 +6,8 @@
 #VarCall (SAMtools)
 ###
 
-projid='b2010035'
-email='daniel.edsgard@scilifelab.se'
+projid='b2012046'
+email='alva.rani@scilifelab.se'
 sbatchdir='/proj/b2012046/edsgard/ase/sim/scripts/varcalls'
 bamdir='/proj/b2012046/edsgard/ase/sim/data/tophat'
 vcfdir='/proj/b2012046/edsgard/ase/sim/data/varcalls'

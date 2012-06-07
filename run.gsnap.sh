@@ -1,51 +1,63 @@
 #! /bin/bash -l
 # download the software and DB
-wget 'http://research-pub.gene.com/gmap/src/gmap-gsnap-2012-05-15.tar.gz'
+wget 'http://research-pub.gene.com/gmap/src/gmap-gsnap-2012-06-06.tar.gz'
 wget 'http://research-pub.gene.com/gmap/genomes/hg19.tar'
-wget 'ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/snp135.txt.gz'
 
+gsnapexecdir='/bubo/home/h24/alvaj/opt0/gmap-2012-06-06'
 
-#set vars
-annotdir='/bubo/home/h24/alvaj/glob/annotation/gsnap'
-splicefile=${annotdir}/'splicesitesfilechr'
-refdir=${annotdir}/gmapdb
-ref=hg19
-snpdir=${annotdir}/dbsnp
-snpfile=dbsnp135
-
-
-### 
 #SNPs
 ###
 # downloaded the needed file snp134,snp135common, 
 cd $snpdir
 wget 'ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/snp135Common.txt.gz'
+## done again saved in annotation/gsnap for latest version of gsanp
+wget 'ftp://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/snp135.txt.gz'
 
-#reformat
-gunzip -c snp135Common.txt.gz | /bubo/home/h24/alvaj/opt/gmap-2012-05-15/util/dbsnp_iit  -w 3  > ${snpfile}.txt &
+#reformat---from here I have to run for the new version
+gunzip -c snp135Common.txt.gz | ${gsnapexecdir}/dbsnp_iit  -w 3  > ${snpfile}.txt &
+gunzip -c snp135Common.txt.gz | ${gsnapexecdir}/dbsnp_iit  -w 3  > dbsnp135.txt &
+## done and save in annotation/gsnap |I used it here for new version)
 
-(cat ${snpfile}.txt | /bubo/home/h24/alvaj/opt/gmap-2012-05-15/src/iit_store -o $snpfile >${snpfile}.iitstore.out) >& ${snpfile}.iitstore.err &
+(cat ${snpfile}.txt |${gsnapexecdir}/iit_store -o $snpfile >${snpfile}.iitstore.out) >& ${snpfile}.iitstore.err &
+##done for new version
 
 (snpindex -D $refdir -d $ref -V $snpdir -v $snpfile ${snpfile}.iit >snpindex.out) >& snpindex.err &
-
+/bubo/home/h24/alvaj/opt0/gmap-2012-06-06/src/snpindex
 
 ###
 # Splice sites , to generate a splice site index---***splicesite***
 ###
-cat Homo_sapiens.GRCh37.59.gtf |/bubo/home/h24/alvaj/glob/annotation/gsnap/gmap-2012-05-15/util/gtf_splicesites > snp.splicesiteschr
-#TBD: awk thingy...
-## processing it to map file (changing to .iit file)---done for snp.splicesitechr
-cat snp.splicesitechr |/bubo/home/h24/alvaj/glob/annotation/gsnap/gmap-2012-05-15/src/iit_store -o splicesitesfilechr
+cat Homo_sapiens.GRCh37.59.gtf |${gsnapexecdir}/gtf_splicesites > snp.splicesiteschr
+#(---done)
 
+cat snp.splicesiteschr | awk '{print $1, "chr"$2, $3, $4;}' >splicesiteschr 
+#(has to do it agagin)******IMP****since rewritten over it
+
+# renamed file is splicesitechr
+
+## processing it to map file (changing to .iit file)---done for snp.splicesitechr
+cat splicesiteschr | ${gsnapexecdir}/iit_store -o splicesiteschro
+## done
 
 ###
 ## Fastq files
 ###
+
+#set path for for each of these variables 
+gsnapexecdir='/bubo/home/h24/alvaj/opt0/gmap-2012-06-06'
+annotdir='/bubo/home/h24/alvaj/glob/annotation/gsnap'
 scriptdir='/proj/b2012046/rani/scripts/gsnap'
 fastqdir='/proj/b2012046/edsgard/ase/sim/data/synt/fastqfilt'
+outdir='/proj/b2012046/rani/analysis/gsnap'
+
+splicefile=${annotdir}/'splicesiteschro'
+refdir=${annotdir}/gmapdb
+ref=hg19
+snpdir=${annotdir}/dbsnp
+snpfile=dbsnp135
 projid='b2012046'
 email='alva.rani@scilifelab.se'
-outdir='/proj/b2012046/rani/analysis/gsnap'
+
 
 # all files apart from those with '.S' extension
 cd $scriptdir
@@ -64,7 +76,7 @@ cat fastq.files | sed 's/1.filter.fastq//' | grep -v '2.filter.fastq' >fastqfile
 #SBATCH -o $outdir/log/gsnap.samplejid_%j.stdout
 #SBATCH --mail-type=All
 #SBATCH --mail-user=$email
-export PATH=$PATH:/bubo/home/h24/alvaj/opt/gmap-2012-05-15/bin
+export PATH=$PATH:${gsnapexecdir}/bin
 cd ${fastqdir}
 gsnap -D $refdir -d $ref -A sam -s $splicefile -V $snpdir -v $snpfile --quality-protocol=illumina sample1.filter.fastq sample2.filter.fastq >${outdir}/samplesam
 EOF

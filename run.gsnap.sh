@@ -66,6 +66,7 @@ find $fastqdir -maxdepth 1 -name '*fastq' | grep -v '\.S\.' >fastq.files
 #Create sbatch scripts
 cat fastq.files | sed 's/1.filter.fastq//' | grep -v '2.filter.fastq' >fastqfiles.prefix
 
+samdir='/bubo/home/h24/alvaj/glob/annotation/gsnap/samtools/samtools-0.1.6/samtools'
 (cat <<EOF
 #!/bin/bash -l
 #SBATCH -A $projid
@@ -78,7 +79,7 @@ cat fastq.files | sed 's/1.filter.fastq//' | grep -v '2.filter.fastq' >fastqfile
 #SBATCH --mail-user=$email
 export PATH=$PATH:${gsnapexecdir}/bin
 cd ${fastqdir}
-gsnap -D $refdir -d $ref -A sam -s $splicefile -V $snpdir -v $snpfile --quality-protocol=illumina sample1.filter.fastq sample2.filter.fastq >${outdir}/samplesam
+gsnap -D $refdir -d $ref -A sam -s $splicefile -V $snpdir -v $snpfile --quality-protocol=illumina sample1.filter.fastq sample2.filter.fastq | ${samdir} view -bS >  >${outdir}/samplebam
 EOF
 ) >sbatch.template
 cat fastqfiles.prefix | xargs -I% basename % | xargs -I% echo cat sbatch.template "| sed 's/sample/"%"/g' >" %gsnap.sbatch >cmds.sh

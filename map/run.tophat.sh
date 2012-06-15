@@ -1,3 +1,4 @@
+#! /bin/bash -l
 #Map with tophat
 #DEP: tophat.gensbatch.pl
 
@@ -6,15 +7,15 @@
 #Tophat
 ###
 #Longest run: 5h38min, 6G file for each readpair: 8_LPS.readp_1.2.ill.fastq
-email='daniel.edsgard@scilifelab.se'
-projid='b2010035'
-execdir='/bubo/home/h26/edsgard/glob/code/ase'
+email='alva.rani@scilifelab.se'
+projid='b2012046'
+execdir='/bubo/home/h24/alvaj/glob/code/ASE/mont'
 fastqdir='/proj/b2012046/edsgard/ase/sim/data/synt/fastqfilt'
 fastqsuffix='.filter.fastq'
-outdir='/proj/b2012046/edsgard/ase/sim/data/tophat'
-sbatchdir='/proj/b2012046/edsgard/ase/sim/scripts/tophat'
+outdir='/proj/b2012046/rani/analysis/monte'
+sbatchdir='/proj/b2012046/rani/scripts/monte'
 
-#Vars
+#Vars.
 threads='8'
 annotdir='/bubo/home/h26/edsgard/glob/annotation/human/'
 gtf=${annotdir}'Homo_sapiens.GRCh37.59.gtf'
@@ -24,8 +25,9 @@ readlen='100'
 isizefile='/proj/b2011075/data/rnaseq/bioanalyzer/isizes.only.tab'
 isizedev='75' #very rough approx from the bioanalyzer plots. Also, we use trimming which further adds to the deviation.
 
+
 cd $sbatchdir
-rm cmds.sh
+#rm cmds.sh
 samples=(`cat samples.list`)
 for sample in ${samples[@]}
 do
@@ -40,3 +42,5 @@ find . -name '*.tophat.sbatch' | xargs -I% sbatch %
 
 #Check:
 find . -name 'tophat*.stderr' | xargs -I% tail -1 % | sort
+
+#submitted

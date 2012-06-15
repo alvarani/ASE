@@ -78,7 +78,7 @@ cat fastq.files | sed 's/1.filter.fastq//' | grep -v '2.filter.fastq' >fastqfile
 #SBATCH --mail-user=$email
 export PATH=$PATH:${gsnapexecdir}/bin
 cd ${fastqdir}
-gsnap -D $refdir -d $ref -A sam -s $splicefile -V $snpdir -v $snpfile --quality-protocol=illumina sample1.filter.fastq sample2.filter.fastq >${outdir}/samplesam
+gsnap -D $refdir -d $ref -A sam -s $splicefile -V $snpdir -v $snpfile --quality-protocol=illumina sample1.filter.fastq sample2.filter.fastq | ${samdir}/samtools view -Sb -  >${outdir}/samplesam
 EOF
 ) >sbatch.template
 cat fastqfiles.prefix | xargs -I% basename % | xargs -I% echo cat sbatch.template "| sed 's/sample/"%"/g' >" %gsnap.sbatch >cmds.sh

@@ -8,21 +8,21 @@
 ###
 module load bioinfo-tools
 module load samtools/0.1.16
-find '/proj/b2011075/analysis/hs_pipe/outdata/run1' -name 'accepted_hits.bam.sorted.nodup' -exec sh -c "samtools flagstat {} >{}.samtools.flagstat.out" \; &
-find '/proj/b2011075/analysis/hs_pipe/outdata/run1' -name '*.samtools.flagstat.out' | xargs -I% awk 'NR == 1 {print FILENAME, $1;}' % >nmapped.reads
+find '/proj/b2012046/rani/analysis/gsnap' -name 'accepted_hits.bam.sorted.nodup' -exec sh -c "samtools flagstat {} >{}.samtools.flagstat.out" \; &
+find '/proj/b2012046/rani/analysis/gsnap' -name '*.samtools.flagstat.out' | xargs -I% awk 'NR == 1 {print FILENAME, $1;}' % >nmapped.reads
 
 
 ###
 #Calculate coverage
 ###
 
-#BEDtools (see coverage.pl)
-prg='/bubo/home/h26/edsgard/glob/code/ngs_pipes/hs_pipe/coverage.pl'
-find '/proj/b2011075/analysis/hs_pipe/outdata/run1' -name 'merged.bam' | awk -F'/' -v ods="$ods" -v projid="$projid" -v em="$email" -v prg="$prg" '{print "perl", prg, $0, $8, ods, projid, em;}' >bedtoolscov.sh
+#BEDtools (see coverage.pl)--IMP
+prg='/proj/b2012046/rani/scripts/gsnap/coverage.pl'
+find '/proj/b2012046/rani/analysis/gsnap' -name 'merged.bam' | awk -F'/' -v ods="$ods" -v projid="$projid" -v em="$email" -v prg="$prg" '{print "perl", prg, $0, $8, ods, projid, em;}' >bedtoolscov.sh
 
 
 ###
-#Generate pdf of the coverage
+#Generate pdf of the coverage--NOT needed now
 ###
 find . -name 'ccds.bedtools.out2' -exec sh -c 'grep ^all {} >{}.all' \;
 find . -name 'ensembl.bedtools.out' -exec sh -c 'grep ^all {} >{}.all' \;

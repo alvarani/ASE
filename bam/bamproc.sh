@@ -9,8 +9,8 @@
 email='alva.rani@scilifelab.se'
 projid='b2012046'
 execdir='/bubo/home/h24/alvaj/glob/code/ASE/bam'
-bamdir='/proj/b2012046/edsgard/ase/sim/data/tophat'
 sbatchdir='/proj/b2012046/rani/scripts/gsnap/bamscripts'
+bamdir='/proj/b2012046/rani/scripts/gsnap/bamfiles'
 cd $sbatchdir
 find $bamdir -name 'accepted_hits.bam' | awk -F'/' -v execdir=$execdir -v sbatchdir=$sbatchdir -v projid=$projid -v email=$email '{print "perl", execdir"/rmdups.pl", $0, $9, sbatchdir, projid, email;}' >rmdups.sh
 sh rmdups.sh

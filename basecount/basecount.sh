@@ -1,4 +1,4 @@
-#Basecount
+#Basecount (allelic count of each allele)
 #DEP: dphetfilter.R
 #DEP: mpileup.allelecount.pl
 #DEP: vcfI162basecount.sh

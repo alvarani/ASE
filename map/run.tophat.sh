@@ -10,8 +10,8 @@
 email='alva.rani@scilifelab.se'
 projid='b2012046'
 execdir='/bubo/home/h24/alvaj/glob/code/ASE/mont'
-fastqdir='/proj/b2012046/edsgard/ase/sim/data/synt/fastqfilt'
-fastqsuffix='.filter.fastq'
+fastqdir='/proj/b2012046/edsgard/ase/sim/data/degner'
+fastqsuffix='.fastq'
 outdir='/proj/b2012046/rani/analysis/monte'
 sbatchdir='/proj/b2012046/rani/scripts/monte'
 
@@ -32,7 +32,7 @@ samples=(`cat samples.list`)
 for sample in ${samples[@]}
 do
     find $fastqdir -maxdepth 1 -name ${sample}'*' | sed 's/[12].filter.fastq//' | grep -v '.S.filter.fastq' | sort -u >fastqfiles.prefix.list
-    cat fastqfiles.prefix.list | xargs -I% echo perl ${execdir}/'tophat.gensbatch.pl' $sample % $fastqsuffix $outdir $threads $gtf $ref $isizefile $sbatchdir $projid $email $time $readlen $isizedev >>cmds.sh
+    cat fastqfiles.prefix.list | xargs -I% echo perl ${execdir}/'tophat.singleend.gensbatch.pl' $sample % $fastqsuffix $outdir $threads $gtf $ref $isizefile $sbatchdir $projid $email $time $readlen $isizedev >>cmds.sh
 done
 sh cmds.sh
 find . -name '*.tophat.sbatch' | xargs -I% sbatch %

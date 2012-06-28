@@ -10,9 +10,9 @@
 email='alva.rani@scilifelab.se'
 projid='b2012046'
 #execdir='/bubo/home/h24/alvaj/glob/code/ASE/map'
-#fastqdir='/proj/b2012046/edsgard/ase/sim/data/degner'
-fastqdir='/proj/b2012046/rani/data/fastq'
-fastqfile='testsingle.bqB.fastq'
+fastqdir='/proj/b2012046/edsgard/ase/sim/data/degner'
+#fastqdir='/proj/b2012046/rani/data/fastq'
+#fastqfile='testsingle.bqB.fastq'
 outdir='/proj/b2012046/rani/analysis/monte'
 sbatchdir='/proj/b2012046/rani/scripts/monte'
 
@@ -45,8 +45,8 @@ cd $sbatchdir
 #SBATCH -t 01:00:00
 #SBATCH -J tophat
 #SBATCH -p node -n 8
-#SBATCH -e /proj/b2012046/rani/analysis/monte/test4single/log/tophat.jid_%j.stderr
-#SBATCH -o /proj/b2012046/rani/analysis/monte/test4single/log/tophat.jid_%j.stdout
+#SBATCH -e /proj/b2012046/rani/analysis/monte/log/tophat.jid_%j.stderr
+#SBATCH -o /proj/b2012046/rani/analysis/monte/log/tophat.jid_%j.stdout
 #SBATCH --mail-type=All
 #SBATCH --mail-user=alva.rani@scilifelab.se
 module load bioinfo-tools
@@ -56,9 +56,10 @@ tophat --solexa1.3-quals -G $gtf -o  $outdir $ref ${fastqdir}/testsingle.bqB.fas
 EOF
 ) > sbatch.tophat
 
+cat sbatch.tophat >tophat.sbatch
+sbatch tophat.sbatch
 
-
-find . -name 'sbatch.tophat' | xargs -I% sbatch %
+#find . -name 'sbatch.tophat' | xargs -I% sbatch %
 
 
 

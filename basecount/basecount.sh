@@ -44,25 +44,25 @@ rename .hetvars.alleles.tmp .hetvars.alleles *.hetvars.alleles.tmp
 #BASECOUNT by MPILEUP (no varcall). 
 #First four of I16 == DP4
 #################################################
-bamdir='/proj/b2012046/edsgard/ase/sim/data/tophat'
+bamdir='/proj/b2012046/rani/analysis/gsnap'
 vcfdir='/proj/b2012046/edsgard/ase/sim/data/varcalls'
-bcdir='/proj/b2012046/edsgard/ase/sim/data/basecount'
-execdir='/bubo/home/h26/edsgard/glob/code/ase'
-scriptdir='/proj/b2012046/edsgard/ase/sim/scripts/basecount'
-projid='b2010035'
-email='daniel.edsgard@scilifelab.se'
+bcdir='/proj/b2012046/rani/data/basecount'
+execdir='/bubo/home/h24/alvaj/glob/code/ASE/basecount'
+scriptdir='/proj/b2012046/rani/scripts/basecount'
+projid='b2012046'
+email='alva.rani@scilifelab.se'
 time='5:00:00'
 ref='/bubo/home/h26/edsgard/glob/annotation/human/Homo_sapiens.GRCh37.57.dna.concat.fa'
 
 cd $scriptdir
 find $bamdir -maxdepth 1 -name '*.bam' | xargs -I% basename % | sed 's/\.bam//' >samples.list
-cat samples.list | xargs -I% echo 'perl' ${execdir}'/mpileup.allelecount.pl' ${bamdir}/%.bam ${vcfdir}/%.hetvars $ref $scriptdir $projid $email $time $bcdir >cmds.sh
+cat samples.list | xargs -I% echo 'perl' ${execdir}'/mpileup.allelecount.pl' ${bamdir}/%.bam12 ${vcfdir}/%.hetvars $ref $scriptdir $projid $email $time $bcdir >cmds.sh
 sh cmds.sh
 find $scriptdir -name '*mpileup.basecount*' | xargs -I% sbatch %
 
 #Extract basecounts from vcf files (I16 field)
-bcdir='/proj/b2012046/edsgard/ase/sim/data/basecount'
-execdir='/bubo/home/h26/edsgard/glob/code/ase'
+bcdir='/proj/b2012046/rani/data/basecount'
+execdir='/bubo/home/h24/alvaj/glob/code/ASE/basecount'
 find $bcdir -name '*nocall.vcf' >nocall.vcf.list
 cat nocall.vcf.list | xargs -I% echo 'sh' ${execdir}/vcfI162basecount.sh % '>' %.basecount >cmds.sh
 srun -p devel -t 1:00:00 -A b2010035 sh cmds.sh &

@@ -8,11 +8,11 @@
 
 projid='b2012046'
 email='alva.rani@scilifelab.se'
-sbatchdir='/proj/b2012046/edsgard/ase/sim/scripts/varcalls'
-bamdir='/proj/b2012046/edsgard/ase/sim/data/tophat'
+sbatchdir='/proj/b2012046/rani/scripts/varcall'
+bamdir='/proj/b2012046/rani/analysis/gsnap'
 vcfdir='/proj/b2012046/edsgard/ase/sim/data/varcalls'
 ref='/bubo/home/h26/edsgard/glob/annotation/human/Homo_sapiens.GRCh37.57.dna.concat.fa'
-execdir='/bubo/home/h26/edsgard/glob/code/ngs_pipes/hs_pipe'
+execdir='/bubo/home/h24/alvaj/glob/code/ASE/varcall'
 
 cd $sbatchdir
 

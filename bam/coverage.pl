@@ -41,13 +41,14 @@ sub coverage {
   open (SBATCH, '>', $sbatch_file) or die("Can't write to $sbatch_file: $!\n");
 
   #print sbatch vars
-  print SBATCH "#!/bin/bash -l", "\n";
-  print SBATCH "#SBATCH -A ", $aid, "\n";
+ print SBATCH "#!/bin/bash -l", "\n";
+  print SBATCH "#SBATCH -A ", $ods, "\n";
   print SBATCH "#SBATCH -t ", $time, "\n";
   print SBATCH "#SBATCH -J Cov_", $sampleid, "\n";
   print SBATCH "#SBATCH -p node -n 1", "\n";
   print SBATCH "#SBATCH -e $outdata_infodir/$sampleid.bedtools.cov.stderr2", "\n";
   print SBATCH "#SBATCH -o $outdata_infodir/$sampleid.bedtools.cov.stdout2", "\n";
+
   unless ($em eq 0) {	
     print SBATCH "#SBATCH --mail-type=All", "\n";
     print SBATCH "#SBATCH --mail-user=$em", "\n\n";	

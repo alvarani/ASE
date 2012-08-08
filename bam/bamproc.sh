@@ -55,12 +55,11 @@ find ${bamfile}/info/*.mergesams.*.stderr | xargs -I% grep -i 'warn' %
 #Create indexes
 ###
 find $bamfile -maxdepth 1 -name '*.bam' | xargs -I% echo samtools index % > cmd.sh
-
 #Manually add sbatch header to the cmds.sh script
 (cat <<EOF
 #!/bin/bash -l
 #SBATCH -A $projid
-#SBATCH -t 30:00
+#SBATCH -t 2:00:00
 #SBATCH -J indexbam
 #SBATCH -p core -n 1
 #SBATCH -e ${bamfile}/info/indexbam.jid_%j.stderr

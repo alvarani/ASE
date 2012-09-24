@@ -8,17 +8,17 @@
 
 projid='b2012046'
 email='alva.rani@scilifelab.se'
-sbatchdir='/proj/b2012046/rani/scripts/gsnap/bamscripts/test'
-bamfile='/proj/b2012046/rani/analysis/gsnap/'
-vcfdir='/proj/b2012046/rani/data/varcalls/test'
-ref='/bubo/home/h24/alvaj/glob/code/ASE/test/reference.genome'
+sbatchdir='/proj/b2012046/rani/scripts/gsnap/varscripts'
+bamfile='/proj/b2012046/rani/analysis/gsnap/mergebam'
+vcfdir='/proj/b2012046/rani/data/varcalls'
+ref='/bubo/home/h24/alvaj/glob/annotation/gsnap/reference/reference.genome'
 execdir='/bubo/home/h24/alvaj/glob/code/ASE/varcall'
 
 cd $sbatchdir
-
+# need to redo it again with merged bam files
 #create file listing the bam files
 allbamsfile=${vcfdir}/allbams.list
-find $bamfile -maxdepth 1 -name '*.sorted.bam' >$allbamsfile
+find $bamfile -maxdepth 1 -name '*.bam' >$allbamsfile
 
 #create region files
 module load bioinfo-tools
@@ -27,15 +27,13 @@ srun -p devel -A b2012046 -t 1:00:00 samtools faidx $ref &
 vcfutils.pl splitchr -l 6600000 ${ref}.fai >${vcfdir}/genome.480.regs
 
 
-
 #Run mpileup
 cat ${vcfdir}/genome.480.regs | xargs -I% echo 'perl' ${execdir}/mpileup_multisample.pl $allbamsfile % $sbatchdir $projid $email $ref >cmds.sh
 sh cmds.sh
 find $sbatchdir -name '*.mpileup.sbatch' | xargs -I% sbatch %
 
-##  submitted  done here ..Potential memory Hog!!
- 
-#Check status:
+
+#check status:
 cd $vcfdir
 lt *.stderr >allerrfiles.tmp
 squeue -u alvaj | grep -v JOBID | awk '{print $1;}' | xargs -I% grep % ${vcfdir}/info/allerrfiles.tmp
@@ -45,7 +43,8 @@ find $vcfdir -name 'allbams.*.vcf' | xargs cat | grep -v '^#' >${vcfdir}/allbams
 cat allbams.list.MT:1-16569.vcf | grep '^#' >header.tmp
 cat header.tmp allbams.vcf.tmp >allbams.vcf
 rm header.tmp allbams.vcf.tmp
-wc -l allbams.vcf #26
+wc -l allbams.vcf 
+#26
 
 #Rm slashes ilon vcf sample header
 vcfdir='/proj/b2012046/rani/data/varcalls'

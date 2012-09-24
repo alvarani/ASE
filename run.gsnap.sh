@@ -30,8 +30,9 @@ gunzip -c snp135Common.txt.gz | ${gsnapexecdir}/dbsnp_iit  -w 3  > dbsnp135.txt 
 cat Homo_sapiens.GRCh37.59.gtf |${gsnapexecdir}/gtf_splicesites > snp.splicesiteschr
 #(---done)
 
+# renamed file is splicesitechr
 cat snp.splicesiteschr | awk '{print $1, "chr"$2, $3, $4;}' >splicesiteschr 
-#(has to do it agagin)******IMP****since rewritten over it
+
 
 # renamed file is splicesitechr
 
@@ -85,19 +86,19 @@ echo $sbatchfile
 #SBATCH -J gsnap
 #SBATCH -p node -n 1
 #SBATCH -e $outdir/log/gsnap.${sbatchfile}.jid_%j.stderr
-#SBATCH -o $outdir/log/gsnap.${ssbatchfile}.jid_%j.stdout
+#SBATCH -o $outdir/log/gsnap.${sbatchfile}.jid_%j.stdout
 #SBATCH --mail-type=All
 #SBATCH --mail-user=$email
 export PATH=$PATH:${gsnapexecdir}/bin
 cd ${fastqdir}
 module load bioinfo-tools
 module load samtools/0.1.18
-gsnap -D $refdir -d $ref -A sam -s $splicefile -V $snpdir -v $snpfile --quality-protocol=illumina ${fastqfile}.readp_1 ${fastqfile}.readp_2 | samtools view -Sb - >${outdir}/${sbatchfile}.bam
+ gsnap -D $refdir -d $ref  -A sam -s $splicefile -V $snpdir -v $snpfile --quality-protocol=illumina  --npaths=1  -Q --quiet-if-excessive ${fastqfile}.readp_1 ${fastqfile}.readp_2 | samtools view -Sb - >${outdir}/${sbatchfile}.bam
 EOF
 )>${sbatchfile}.sbatch
 done
 find . -name '*.fastq.sbatch' | xargs -I% sbatch %
 #status: submitted
 
-
+############
 

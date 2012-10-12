@@ -5,11 +5,12 @@ sys = 'local'
 if(sys == 'kalkyl'){
 }
 if(sys == 'local'){  
-  varcalls.datadir = '~/Dropbox/postdoc/projects/ase/data/sim/varcalls'
-  basecount.datadir='~/Dropbox/postdoc/projects/ase/data/sim/basecount'  
-  ase.datadir = '~/Dropbox/postdoc/projects/ase/data/sim/ase'
-  resdir = '~/Dropbox/postdoc/projects/ase/res/sim'
-  annovar.datadir = '~/Dropbox/postdoc/projects/ase/data/sim/annovar'
+basedir ='/proj/b2012046/rani/analysis/degner'
+  varcalls.datadir = file.path(basedir, 'varcall')
+  basecount.datadir = file.path(basedir, 'basecount')  
+  ase.datadir = file.path(basedir, 'ase')
+  resdir = '/proj/b2012046/rani/analysis/degner/ase'
+  annovar.datadir = file.path(basedir, 'annovar')
 }
 
 #mpileup calls
@@ -55,6 +56,8 @@ main <- function(){
   save(basecount.list, file = bc.file)
 
   
+
+
   ###
   #Filter
   ###
@@ -66,8 +69,16 @@ main <- function(){
   bc.filt = lapply(bc.filt, function(bc){bc[which(bc[, 'site.dp'] >= min.dp), ]})
 
   #total number of vars
-  length(unique(unlist(lapply(bc.filt, '[[', 'site')))) #112756
+  length(unique(unlist(lapply(bc.filt, '[[', 'site')))) #72377
   
+  #get dbsnp variants 
+  dbsnp.vars = read.table(dbsnp.vars.file, stringsAsFactors = FALSE)
+  colnames(dbsnp.vars) = 'site'
+
+  #subset on dbsnp variants
+  bc.filt = lapply(bc.filt, function(jsample.vars, dbsnp.vars){merge(jsample.vars, dbsnp.vars, by.x = 'site')}, dbsnp.vars = dbsnap.vars)
+
+
   ###  
   #DP dist
   ###
@@ -128,22 +139,19 @@ main <- function(){
   dev.off()
   
   #number of uniq sig.vars
-  length(unique(unlist(lapply(sig.vars, '[[', 'site')))) #45952
+  length(unique(unlist(lapply(sig.vars, '[[', 'site')))) #degner:17107
 
 
-  
+  ### from here i havent run towards top:^
 
-  #((see varstats.R for inspiration, or its enough with the stuff in multiplesnsps2gene.R))
-  #gene annot
-  #DE
-
+ 
   
   ###
   #Gene based analysis. 
   ###
   #See: multiplesnps2gene.R.
 
-}
+} ## close for main function....
 
 alt.filter <- function(jsample.ase, site.col = 'site', frac.col = 'alt.frac'){
 

@@ -145,6 +145,8 @@ git add run.tophat.sh
 git remote add origin https:https://github.com/alvarani/ASE.git
 git push origin master
 
+
+
 #kill all slurm jobs--if you want to specify the number of jobs eg: 'NR >32 {print $1;}'
 squeue -u alvaj | grep -v JOB | awk '{print $1;}' | xargs -I% scancel %
 
@@ -181,13 +183,6 @@ find . -type f -name "*.sam" | ${samdir}samtools view -bS  > ${outdir}/samplebam
 #example sed 
 sed 's/day/night/' <old >new
 
-s	  Substitute command
-/../../	  Delimiter
-day	  Regular Expression Pattern Search Pattern
-night	  Replacement string , ie replace day with night
-# anothe rexample with echno
-echo Sunday | sed 's/day/night/'
-
-# the codes for bam file is in this one ASE
-/bubo/home/h24/alvaj/glob/code/ASE
+## how to remove the first line from a file 
+sed '1d' files >file
 

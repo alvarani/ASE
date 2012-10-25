@@ -1,5 +1,6 @@
 
-
+# Median:#0.495
+#mean: #0.494
 # The latest with corrected values
 sys = 'kalkyl'
 sys = 'local'

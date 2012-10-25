@@ -1,4 +1,5 @@
-
+#median : #0.494
+#mean:#0.495
 sys = 'kalkyl'
 sys = 'local'
 
@@ -72,12 +73,7 @@ main <- function(){
   #total number of vars
   length(unique(unlist(lapply(bc.filt, '[[', 'site')))) #72377
   
-  #get dbsnp variants 
-  dbsnp.vars = read.table(dbsnp.vars.file, stringsAsFactors = FALSE)
-  colnames(dbsnp.vars) = 'site'
 
-  #subset on dbsnp variants
-  bc.filt = lapply(bc.filt, function(jsample.vars, dbsnp.vars){merge(jsample.vars, dbsnp.vars, by.x = 'site')}, dbsnp.vars = dbsnap.vars)
 
 
   ###  

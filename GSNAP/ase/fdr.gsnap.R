@@ -5,14 +5,15 @@ sys = 'local'
 
 if(sys == 'kalk'){
   
-}
+                  }
 if(sys == 'local'){
-syntdir = '/proj/b2012046/edsgard/ase/sim/data/synt/ase'
-  ase.method.resdir = '/proj/b2012046/rani/analysis/gsnap/ase'
+                   syntdir = '/proj/b2012046/edsgard/ase/sim/data/synt/ase'
+                   ase.method.resdir = '/proj/b2012046/rani/analysis/gsnap/ase'
+
+                 }
 #Variant-based analysis
 synt.sig.ase.res.file = file.path(syntdir, 'ase.noninduced.vars.RData')
 sig.ase.res.file = file.path(ase.method.resdir, 'sig.ase.res.RData')
-}
 #Gene-based analysis
 synt.genes.pass.file = file.path(syntdir, 'multisnp.genes.pass.RData')
 method.genes.pass.file = file.path(ase.method.resdir, 'multisnp.genes.pass.RData')
@@ -42,15 +43,23 @@ main <- function(){
   sig.vars = unique(unlist(lapply(sig.vars, rownames)))
   sig.vars = gsub('^chr', '', sig.vars)
   alt.sig.vars = gsub('^chr', '', alt.sig.vars)
-  
+
+  #Specificity
   #get fdr, alt allele direction filtered: NO
   fdr = get.fdr(sig.vars, true.sig.vars)
-  print(fdr) #7.4%
+  print(fdr) #Specificity:7.4%
 
   #get fdr, alt allele direction filtered: YES
   fdr = get.fdr(alt.sig.vars, true.alt.sig.vars)
-  print(fdr) #6.3%
+  print(fdr) #Specificity: 6.3%
   
+  #SENSITIVITY
+  #get sensitivity
+  sens = get.sens(alt.sig.vars, true.alt.sig.vars)
+  print(sens) #1.24 %
+  # For signifivant variants
+  sens = get.sens(sig.vars, true.alt.sig.vars)
+  print(sens) #2.07%
   
   ###
   #1.2 Genes
@@ -66,15 +75,28 @@ main <- function(){
   
   #get fdr, n.samples = 2
   fdr = get.fdr(genes.pass, true.genes.pass)
-  print(fdr) #39%, 146, 373
+  print(fdr) #46%, 72, 156
 
   #n.samples = 1
   true.genes.pass = names(true.gene2nsamples)
   genes.pass = names(gene2nsamples)
   fdr = get.fdr(genes.pass, true.genes.pass)
-  print(fdr) #19%, 462, 2407
+  print(fdr) #19%, 300, 1508
 
-  
+  #SENSITIVITY
+  #get sensitivity
+   #n.samples = 2
+  sens = get.sens(genes.pass, true.genes.pass)
+  print(sens) #1%  156.0000000 1352.0000000
+  # For signifivant variants
+  #n.samples = 1
+  true.genes.pass = names(true.gene2nsamples)
+  genes.pass = names(gene2nsamples)
+  sens = get.sens(genes.pass, true.genes.pass)
+  print(sens) #9.6%
+    
+#********# my results#**************
+
   ##########
   #2. Condition-dependent ASE
   ##########
@@ -174,6 +196,17 @@ get.fdr <- function(feat.pass, true.feat.pass){
 
   fdr = c(fdr, n.fp, n.p)
   return(fdr)
+}
+
+get.sens <- function(feat.pass, true.feat.pass){
+  tp = intersect(feat.pass, true.feat.pass)
+  fn = setdiff(true.feat.pass, feat.pass)
+  n.tp = length(tp)
+  n.fn = length(fn)
+  sens = n.tp / (n.tp + n.fn)
+
+  sens = c(sens, n.tp, n.fn)
+  return(sens)
 }
 
 filter.altallele <- function(vars, frac.thr = 0.5, gene.col = 'gene annot', frac.col = 'frac', pval.col = 'mod.padj', min.alt = 1, alpha = 0.05){

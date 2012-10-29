@@ -5,21 +5,22 @@ if(sys == 'kalk'){
   
 }
 if(sys == 'local'){
-syntdir = '/proj/b2012046/edsgard/ase/sim/data/synt/ase'
-  ase.method.resdir = '/proj/b2012046/rani/analysis/degner/ase'
-#Variant-based analysis
-synt.sig.ase.res.file = file.path(syntdir, 'ase.noninduced.vars.RData')
-sig.ase.res.file = file.path(ase.method.resdir, 'sig.ase.res.RData')
-}
-#Gene-based analysis
-synt.genes.pass.file = file.path(syntdir, 'multisnp.genes.pass.RData')
-method.genes.pass.file = file.path(ase.method.resdir, 'multisnp.genes.pass.RData')
+                   syntdir = '/proj/b2012046/edsgard/ase/sim/data/synt/ase'
+                   ase.method.resdir = '/proj/b2012046/rani/analysis/degner/ase'
+                  }
 
-#Cond-dep ASE
-induced.ase.sig.file = file.path(syntdir, 'induced.ase.sig.RData')
+  #Variant-based analysis
+  synt.sig.ase.res.file = file.path(syntdir, 'ase.noninduced.vars.RData')
+  sig.ase.res.file = file.path(ase.method.resdir, 'sig.ase.res.RData')
+  #Gene-based analysis
+  synt.genes.pass.file = file.path(syntdir, 'multisnp.genes.pass.RData')
+  method.genes.pass.file = file.path(ase.method.resdir, 'multisnp.genes.pass.RData')
+
+  #Cond-dep ASE
+  induced.ase.sig.file = file.path(syntdir, 'induced.ase.sig.RData')
 
 
-main <- function(){
+  main <- function(){
 
   
   ######
@@ -43,13 +44,20 @@ main <- function(){
   
   #get fdr, alt allele direction filtered: NO
   fdr = get.fdr(sig.vars, true.sig.vars)
-  print(fdr) #7.4%
+  print(fdr) #1.59%
 
   #get fdr, alt allele direction filtered: YES
   fdr = get.fdr(alt.sig.vars, true.alt.sig.vars)
-  print(fdr) #6.3%
+  print(fdr) #2.6%
   
-  
+   #SENSITIVITY
+  #get sensitivity
+  sens = get.sens(alt.sig.vars, true.alt.sig.vars)
+  print(sens) #6.2 %
+  # For signifivant variants
+  sens = get.sens(sig.vars, true.alt.sig.vars)
+  print(sens) #9.9%
+
   ###
   #1.2 Genes
   ###
@@ -64,15 +72,29 @@ main <- function(){
   
   #get fdr, n.samples = 2
   fdr = get.fdr(genes.pass, true.genes.pass)
-  print(fdr) #39%, 146, 373
+  print(fdr) #31%  6.0000000 19.0000000
 
-  #n.samples = 1
-  true.genes.pass = names(true.gene2nsamples)
-  genes.pass = names(gene2nsamples)
-  fdr = get.fdr(genes.pass, true.genes.pass)
-  print(fdr) #19%, 462, 2407
+   #SENSITIVITY
+   #get sensitivity
+   #n.samples = 2
+   sens = get.sens(genes.pass, true.genes.pass)
+   print(sens) #16% 
+
+   #n.samples = 1
+   true.genes.pass = names(true.gene2nsamples)
+   genes.pass = names(gene2nsamples)
+   fdr = get.fdr(genes.pass, true.genes.pass)
+   print(fdr) #23% 106  449
 
   
+   #n.samples = 1
+   true.genes.pass = names(true.gene2nsamples)
+   genes.pass = names(gene2nsamples)
+   sens = get.sens(genes.pass, true.genes.pass)
+   print(sens) #2.7%
+  
+#********# my results#**************
+
   ##########
   #2. Condition-dependent ASE
   ##########

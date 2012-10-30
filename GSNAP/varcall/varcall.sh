@@ -11,7 +11,7 @@ email='alva.rani@scilifelab.se'
 sbatchdir='/proj/b2012046/rani/scripts/gsnap/varscripts'
 bamfile='/proj/b2012046/rani/analysis/gsnap/mergebam'
 vcfdir='/proj/b2012046/rani/analysis/gsnap/varcalls'
-ref='/bubo/home/h24/alvaj/glob/annotation/gsnap/reference/Homo_sapiens.GRCh37.57.dna.concat.fa'
+ref='/bubo/home/h24/alvaj/glob/annotation/gsnap/reference/Homo_sapiens.GRCh37.57.dna.concat.addedchr.fa'
 execdir='/bubo/home/h24/alvaj/glob/code/ASE/varcall'
 
 cd $sbatchdir

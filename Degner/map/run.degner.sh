@@ -32,7 +32,7 @@ cd $fastqdir
 ls *.fastq | awk '{split($0,b,"."); print b[1]}' > ${sbatchdir}/samples.list
 cd $sbatchdir
 rm cmds.sh
-
+# tohat with uniq parameters, added in tophat.gensbatch.pl(the uniq mapping parameter for transcriptosome)
 samples=(`cat samples.list`)
 for sample in ${samples[@]}
 do

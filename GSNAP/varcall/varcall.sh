@@ -47,7 +47,7 @@ wc -l allbams.vcf
 #26
 
 #Rm slashes ilon vcf sample header
-vcfdir='/proj/b2012046/rani/data/varcalls'
+vcfdir='/proj/b2012046/rani/analysis/gsnap/varcalls'
 cd ${vcfdir}
 cat allbams.vcf | grep '^#' >header.tmp
 cat header.tmp | sed 's/\/proj\/b2012046\/rani\/analysis\/gsnap\///g' | sed 's/\.bam//g' >file.tmp

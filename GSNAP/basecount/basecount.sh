@@ -57,7 +57,7 @@ scriptdir='/proj/b2012046/rani/scripts/basecount'
 projid='b2012046'
 email='alva.rani@scilifelab.se'
 time='10:00:00'
-ref='/bubo/home/h24/alvaj/glob/annotation/gsnap/reference/reference.genome'
+ref='/bubo/home/h24/alvaj/glob/annotation/gsnap/reference/Homo_sapiens.GRCh37.57.dna.concat.addedchr.fa'
 
 cd $scriptdir
 find $bamdir -maxdepth 1 -name '*.bam' | xargs -I% basename % | sed 's/\.bam//' >samples.list
